@@ -36,4 +36,5 @@ CMakeFiles/*
 CMakeCache.txt
 CMakeLists.txt
 CMakeList.txt.bak
+cmake_install.cmake
 
