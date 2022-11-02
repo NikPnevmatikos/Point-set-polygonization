@@ -1,0 +1,7 @@
+# HIP random 2-dimensional integral point set (10 points), distribution 'uniform'
+# parameters "convex_hull": {"area": "167380"}
+1	0	0
+2	0	3
+3	2	0
+4	7	3
+6	10	6
