@@ -1,3 +1,0 @@
-/home/users/sdi1900052/Point-set-polygonization/CMakeFiles/rebuild_cache.dir
-/home/users/sdi1900052/Point-set-polygonization/CMakeFiles/edit_cache.dir
-/home/users/sdi1900052/Point-set-polygonization/CMakeFiles/main.dir
