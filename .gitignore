@@ -32,6 +32,7 @@
 *.app
 
 #cmake
+CMakeFiles/*
 CMakeCache.txt
 CMakeLists.txt
 CMakeList.txt.bak
