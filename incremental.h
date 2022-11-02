@@ -17,4 +17,4 @@ Polygon_2 create_convex(Point_2, Polygon_2, int, int);
 
 bool is_visible(Segment_2, Segment_2, Polygon_2); 
 
-void incremental(vector<Point_2>);
+Polygon_2 incremental(vector<Point_2>,string, int, double*);

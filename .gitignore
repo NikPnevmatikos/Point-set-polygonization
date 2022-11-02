@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+#cmake
+CMakeCache.txt
+CMakeLists.txt
+CMakeList.txt.bak
+

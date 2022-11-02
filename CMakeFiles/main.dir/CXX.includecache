@@ -6,11 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/home/users/sdi1900052/Point-set-polygonization/incremental.cpp
-incremental.h
-/home/users/sdi1900052/Point-set-polygonization/incremental.h
-sort.h
-/home/users/sdi1900052/Point-set-polygonization/sort.h
+/home/users/sdi1900052/Point-set-polygonization/convertfile.h
+CGAL/Simple_cartesian.h
+-
+vector
+-
+string
+-
+iostream
+-
+CGAL/Polygon_2.h
+-
+CGAL/Exact_predicates_inexact_constructions_kernel.h
+-
 
 /home/users/sdi1900052/Point-set-polygonization/incremental.h
 CGAL/Simple_cartesian.h
@@ -26,9 +34,15 @@ CGAL/Triangle_2.h
 CGAL/Exact_predicates_inexact_constructions_kernel.h
 -
 
-/home/users/sdi1900052/Point-set-polygonization/sort.h
-CGAL/Simple_cartesian.h
+/home/users/sdi1900052/Point-set-polygonization/main.cpp
+incremental.h
+/home/users/sdi1900052/Point-set-polygonization/incremental.h
+convertfile.h
+/home/users/sdi1900052/Point-set-polygonization/convertfile.h
+string.h
 -
 CGAL/Exact_predicates_inexact_constructions_kernel.h
+-
+chrono
 -
 
