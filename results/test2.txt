@@ -4,13 +4,10 @@
 2 2
 0 1
 7 3
+-
 11 0 10 6
 10 6 1 5
 1 5 2 2
 2 2 0 1
 0 1 7 3
 7 3 11 0
-Algorithm: incremental_edge_selection 2_initializtion 2a
-Area: 32
-ratio: 0.000191182
-construction time: 1
