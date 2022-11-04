@@ -127,7 +127,7 @@ Polygon_2 insert_point_min(Polygon_2 p, Point_2 point, Point_2 start, Point_2 en
 
         to_be_inserted++;
     }
-    cout << "green edges " << green_edges.size() << endl;
+
     p.insert(p.vertices_begin() + minit, point);
 
     *area = *area + min;
@@ -181,33 +181,45 @@ Polygon_2 insert_point_random(Polygon_2 p, Point_2 point, Point_2 start, Point_2
 Polygon_2 incremental(vector<Point_2> points, string initialization, int edge_selection, double* resultarea) {
 
     if (initialization.compare("1a")) {
-        sort(points.begin(), points.end(), decreasing_x);
-    }
-    else if (initialization.compare("1b")) {
         sort(points.begin(), points.end(), increasing_x);
     }
-    else if (initialization.compare("2a")) {
-        sort(points.begin(), points.end(), decreasing_y);
+    else if (initialization.compare("1b")) {
+        sort(points.begin(), points.end(), decreasing_x);
     }
-    else if (initialization.compare("2b")) {
+    else if (initialization.compare("2a")) {
         sort(points.begin(), points.end(), increasing_y);
     }
+    else if (initialization.compare("2b")) {
+        sort(points.begin(), points.end(), decreasing_y);
+    }
     
-    cout << "lala" << endl;
     Polygon_2 p;
     Polygon_2 convex;
     
 
     // make a triangle using the first 3 points
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 3; i++) {
         p.push_back(Point_2(points[i]));
         convex.push_back(Point_2(points[i]));
     }
 
+    CGAL::Sign collinear = CGAL::orientation(points[0], points[1], points[2]);
+
+    int index = 3;
+    while (collinear == 0) {
+        if (index >= points.size()) {
+            perror("all points are collinear");
+            exit(-1);
+        }
+        p.push_back(Point_2(points[index]));
+        convex.push_back(Point_2(points[index]));        
+        collinear = CGAL::orientation(points[0], points[1], points[index]); 
+        index++;
+    }
+    
     double area = abs(p.area());
 
-    for (int pointindex = 3; pointindex < points.size(); pointindex++) {
-        cout << "begging of for loop" << endl;
+    for (int pointindex = index; pointindex < points.size(); pointindex++) {
         // find the orientation of the polygon
         // if it is positive(+) then the visible edges are going to be negative(-) and vice versa
         // the orientation of the polygon sometimes changes so we got to check it everytime
@@ -238,7 +250,7 @@ Polygon_2 incremental(vector<Point_2> points, string initialization, int edge_se
                     }
                     startcon = curpos;
                 }
-                cout << "(before push reedge)e.target is " << e.target() << endl;
+
                 red_edges.push_back(e);
             }            
             else {      // not visible
@@ -270,7 +282,7 @@ Polygon_2 incremental(vector<Point_2> points, string initialization, int edge_se
             endcon = 0;
         }
 
-        cout << "red edges found" << red_edges.size() << endl;
+
         if (edge_selection == 1) {
             p = insert_point_random(p, points[pointindex], start, end, &area);
         }
@@ -284,6 +296,7 @@ Polygon_2 incremental(vector<Point_2> points, string initialization, int edge_se
         convex = create_convex(points[pointindex], convex, startcon, endcon);
 
     }
+
 
     *resultarea = area;
     return p;
