@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
   
 
-with open("./results/test4.txt", "r") as file:
+with open("./results/test3.txt", "r") as file:
     points_x=[]
     points_y=[]
     fl=False
