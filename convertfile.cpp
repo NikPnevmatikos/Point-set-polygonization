@@ -72,8 +72,10 @@ void write_file(string outfile,Polygon_2 result, string algorithm, int edge_sele
 
     MyFile << "Algorithm: " << algorithm << "_";
     MyFile << "edge_selection " << edge_selection << "_";
-    MyFile << "initializtion " << initialization << endl;
-    MyFile << "Area: " << area << endl;
+    if(initialization.empty() == false){
+        MyFile << "initializtion " << initialization;
+    }
+    MyFile << "\nArea: " << area << endl;
     MyFile << "ratio: " << area/convex_area << endl;
     MyFile << "construction time: " << duration << endl; 
  

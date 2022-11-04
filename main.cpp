@@ -1,4 +1,5 @@
 #include "incremental.h"
+#include "convexHull.h"
 #include "convertfile.h"
 #include <string.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
@@ -83,6 +84,9 @@ int main (int argc, char **argv) {
     double area; 
     if (algorithm.compare("incremental") == 0) {
         result = incremental(points, initialization, edge_selection, &area);
+    }
+    else if(algorithm.compare("convex_hull") == 0){
+        result = convex_hull(points, edge_selection, &area);
     }
     
     auto stop = chrono::high_resolution_clock::now();

@@ -23,6 +23,7 @@ Polygon_2 create_convex(Point_2 point, Polygon_2 convex, int start, int end) {
 // checks if any edge intersects with an edge of the polygon
 // returns true if it is visible and false if it isn't
 bool is_visible(Segment_2 seg1, Segment_2 seg2, Polygon_2 pol) {
+    bool flag = true;
     for (const Segment_2& e : pol.edges()) {
         const auto result1 = intersection(e, seg1);
         const auto result2 = intersection(e, seg2);
@@ -32,19 +33,21 @@ bool is_visible(Segment_2 seg1, Segment_2 seg2, Polygon_2 pol) {
             // of the edge we viewing checking
             if (const Point_2* p = boost::get<Point_2 >(&*result1)) {
                 if (*p != seg1.source() && *p != seg1.target()) {
-                    return false;
+                    flag = false;
+                    break;
                 }
             }
         }
-        else if (result2) {
+        if (result2) {
             if (const Point_2* p = boost::get<Point_2 >(&*result2)) {
                 if (*p != seg2.source() && *p != seg2.target()) {
-                    return false;
+                    flag = false;
+                    break;
                 }
             }
         }
     }
-    return true;
+    return flag;
 }
 
 // function to find the max area of the polygon
@@ -124,7 +127,7 @@ Polygon_2 insert_point_min(Polygon_2 p, Point_2 point, Point_2 start, Point_2 en
 
         to_be_inserted++;
     }
-
+    cout << "green edges " << green_edges.size() << endl;
     p.insert(p.vertices_begin() + minit, point);
 
     *area = *area + min;
@@ -177,7 +180,6 @@ Polygon_2 insert_point_random(Polygon_2 p, Point_2 point, Point_2 start, Point_2
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  I N C R E M E N T A L   F U N C T I O N 
 Polygon_2 incremental(vector<Point_2> points, string initialization, int edge_selection, double* resultarea) {
 
-
     if (initialization.compare("1a")) {
         sort(points.begin(), points.end(), decreasing_x);
     }
@@ -191,7 +193,7 @@ Polygon_2 incremental(vector<Point_2> points, string initialization, int edge_se
         sort(points.begin(), points.end(), increasing_y);
     }
     
-
+    cout << "lala" << endl;
     Polygon_2 p;
     Polygon_2 convex;
     
@@ -205,7 +207,7 @@ Polygon_2 incremental(vector<Point_2> points, string initialization, int edge_se
     double area = abs(p.area());
 
     for (int pointindex = 3; pointindex < points.size(); pointindex++) {
-
+        cout << "begging of for loop" << endl;
         // find the orientation of the polygon
         // if it is positive(+) then the visible edges are going to be negative(-) and vice versa
         // the orientation of the polygon sometimes changes so we got to check it everytime
@@ -236,21 +238,27 @@ Polygon_2 incremental(vector<Point_2> points, string initialization, int edge_se
                     }
                     startcon = curpos;
                 }
+                cout << "(before push reedge)e.target is " << e.target() << endl;
                 red_edges.push_back(e);
             }            
             else {      // not visible
 
                 if (found) {
                     init = true;
-                    if (prev.target() == e.target() || prev.target() == e.source()) {
-                        end = prev.target();
+                    if(e.target() == points[0]){
+                        end = points[0];
+                        endcon = 0;
                     }
-                    else {
-                        end = prev.source();
+                    else{
+                        if (prev.target() == e.target() || prev.target() == e.source()) {
+                            end = prev.target();
+                        }
+                        else {
+                            end = prev.source();
+                        }
+                        endcon = curpos;                        
                     }
-                    endcon = curpos;
                     break;
-                    
                 }
             }
             prev = e;
@@ -262,6 +270,7 @@ Polygon_2 incremental(vector<Point_2> points, string initialization, int edge_se
             endcon = 0;
         }
 
+        cout << "red edges found" << red_edges.size() << endl;
         if (edge_selection == 1) {
             p = insert_point_random(p, points[pointindex], start, end, &area);
         }

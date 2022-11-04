@@ -11,7 +11,12 @@ bool decreasing_x(Point_2 p1, Point_2 p2) {
 }
 
 bool increasing_x(Point_2 p1, Point_2 p2) {
-    return (p1.x() < p2.x());
+    if (p1.x() == p2.x()) {
+        return (p1.y() < p2.y());
+    }
+    else {
+        return (p1.x() < p2.x());
+    }
 }
 
 bool decreasing_y(Point_2 p1, Point_2 p2){
