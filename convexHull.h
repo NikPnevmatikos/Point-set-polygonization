@@ -6,6 +6,7 @@
 #include <CGAL/convex_hull_2.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/squared_distance_2.h>
+#include <time.h>
 
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
