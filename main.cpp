@@ -95,8 +95,11 @@ int main (int argc, char **argv) {
     int duration = duration1.count();
 
     //write to file
+    cout << "Writing result to " << outfile << "." << endl;
     write_file(outfile, result, algorithm, edge_selection, initialization, area, convex_hull_area, duration);
     
+    cout << "Successfully wrote results to file " << outfile << "!" << endl;
+
     return 0;
 }
 
