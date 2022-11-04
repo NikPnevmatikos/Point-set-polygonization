@@ -37,7 +37,7 @@ Input file should be in this form:
 
 Show a graph of the polygon:
 
-    python polygonprint.py
+    python polygonprint.py <filename>
 
 
 Files used:
