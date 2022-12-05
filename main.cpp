@@ -78,7 +78,7 @@ int main (int argc, char **argv) {
     open_file(file, inputfile);
     
     //extract convex hull area and 2d points from file
-    int convex_hull_area = get_points(file, points);
+    long convex_hull_area = get_points(file, points);
 
     Polygon_2 result;
     double area; 

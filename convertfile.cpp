@@ -27,7 +27,7 @@ void open_file(ifstream& myfile, string file_name) {
     }
 }
 
-int get_points(ifstream& myfile, vector<Point_2> &P_v) {
+long get_points(ifstream& myfile, vector<Point_2> &P_v) {
 
     string str;
     string number = "";
@@ -56,7 +56,7 @@ int get_points(ifstream& myfile, vector<Point_2> &P_v) {
         }
     }
 
-    return stoi(number);
+    return stol(number);
 }
 
 void write_file(string outfile,Polygon_2 result, string algorithm, int edge_selection, string initialization, double area, double convex_area, int duration) {
