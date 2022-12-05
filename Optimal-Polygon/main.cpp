@@ -1,5 +1,6 @@
 #include "incremental.h"
 #include "convexHull.h"
+#include "localSearch.h"
 #include "convertfile.h"
 #include <string.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
@@ -99,6 +100,11 @@ int main (int argc, char **argv) {
     write_file(outfile, result, algorithm, edge_selection, initialization, area, convex_hull_area, duration);
     
     cout << "Successfully wrote results to file " << outfile << "!" << endl;
+
+    //////////////////////////////////////////////////////////////////////////////
+    //new 
+    
+    result = localSearch(result, initialization, edge_selection, &area);
 
     return 0;
 }
