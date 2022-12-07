@@ -59,9 +59,10 @@ long get_points(ifstream& myfile, vector<Point_2> &P_v) {
     return stol(number);
 }
 
-void write_file(string outfile,Polygon_2 result, string algorithm, int edge_selection, string initialization, double area, double convex_area, int duration) {
+void write_file(string outfile,Polygon_2 result, string algorithm,string maxmin,double initarea, double area, double convex_area, int duration) {
     ofstream MyFile(outfile);
 
+    MyFile << "Optimal Area Polygonization" << endl;
     for (const Point_2& p : result.vertices()) {
         MyFile << p << endl;
     }
@@ -71,11 +72,10 @@ void write_file(string outfile,Polygon_2 result, string algorithm, int edge_sele
     }
 
     MyFile << "Algorithm: " << algorithm << "_";
-    MyFile << "edge_selection " << edge_selection << "_";
-    if(initialization.empty() == false){
-        MyFile << "initializtion " << initialization;
-    }
-    MyFile << "\nArea: " << area << endl;
+    MyFile << maxmin << endl;
+    MyFile << "area_initial " << initarea << endl;
+    MyFile << "Area: " << area << endl;
+    MyFile << "ratio_initial: " << initarea/convex_area << endl;
     MyFile << "ratio: " << area/convex_area << endl;
     MyFile << "construction time: " << duration << endl; 
  

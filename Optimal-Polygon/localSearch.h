@@ -15,4 +15,5 @@ using namespace std;
 
 bool is_visible_new(Segment_2, Segment_2, Polygon_2); 
 
-Polygon_2 localSearch(Polygon_2,string, int, double*);
+Polygon_2 localSearch_max(Polygon_2, double, int, double*);
+Polygon_2 localSearch_min(Polygon_2, double, int, double*);

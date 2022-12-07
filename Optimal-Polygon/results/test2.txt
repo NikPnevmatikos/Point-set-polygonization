@@ -13,4 +13,4 @@
 Algorithm: incremental_edge_selection 3_initializtion 1b
 Area: 34
 ratio: 0.000203131
-construction time: 43
+construction time: 1

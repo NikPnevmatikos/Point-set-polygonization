@@ -20,9 +20,16 @@ int main (int argc, char **argv) {
 
     string inputfile;
     string outfile;
-    string algorithm; 
+    string polygonInit; 
     int edge_selection = 0;
     string initialization;
+    //////////////////////////////////////////
+
+    string algorithm;
+    string maxmin;
+    int L;
+    double threshold;
+
 
     //args can be accepted in any order
     for (int i = 1; i < argc; i += 2) {
@@ -41,12 +48,12 @@ int main (int argc, char **argv) {
             outfile = argv[i + 1];;
 
         }
-        else if (strcmp(argv[i], "-algorithm") == 0) {
-            if (algorithm.empty() == false) {
-                perror("-algorithm argument is given more than 1 times\n");
+        else if (strcmp(argv[i], "-polygonInit") == 0) {
+            if (polygonInit.empty() == false) {
+                perror("-polygonInit argument is given more than 1 times\n");
                 exit(1);
             }
-            algorithm = argv[i + 1];
+            polygonInit = argv[i + 1];
 
         }
         else if (strcmp(argv[i], "-edge_selection") == 0) {
@@ -63,6 +70,48 @@ int main (int argc, char **argv) {
                 exit(1);
             }
             initialization = argv[i + 1];
+
+        }
+        else if (strcmp(argv[i], "-algorithm") == 0) {
+            if (algorithm.empty() == false) {
+                perror("-initialization argument is given more than 1 times\n");
+                exit(1);
+            }
+            algorithm = argv[i + 1];
+
+        }
+        else if (strcmp(argv[i], "-max") == 0) {
+            if (maxmin.empty() == false) {
+                perror("-initialization argument is given more than 1 times\n");
+                exit(1);
+            }
+            maxmin = "max";
+            i--;
+
+        }
+        else if (strcmp(argv[i], "-min") == 0) {
+            if (maxmin.empty() == false) {
+                perror("-initialization argument is given more than 1 times\n");
+                exit(1);
+            }
+            maxmin = "min";
+            i--;
+
+        }
+        else if (strcmp(argv[i], "-L") == 0) {
+            if (L != 0) {
+                perror("-edge_selection argument is given more than 1 times\n");
+                exit(1);
+            }
+            L = atoi(argv[i + 1]);
+
+        }
+        else if (strcmp(argv[i], "-threshold") == 0) {
+            if (threshold != 0) {
+                perror("-edge_selection argument is given more than 1 times\n");
+                exit(1);
+            }
+            threshold = atof(argv[i + 1]);
 
         }
         else {
@@ -83,13 +132,33 @@ int main (int argc, char **argv) {
 
     Polygon_2 result;
     double area; 
-    if (algorithm.compare("incremental") == 0) {
+    if (polygonInit.compare("incremental") == 0) {
         result = incremental(points, initialization, edge_selection, &area);
     }
-    else if(algorithm.compare("convex_hull") == 0){
+    else if(polygonInit.compare("convex_hull") == 0){
         result = convex_hull(points, edge_selection, &area);
     }
     
+
+
+    // //write to file
+    // cout << "Writing result to " << outfile << "." << endl;
+    // write_file(outfile, result, polygonInit, edge_selection, initialization, area, convex_hull_area, duration);
+    
+    // cout << "Successfully wrote results to file " << outfile << "!" << endl;
+
+    //////////////////////////////////////////////////////////////////////////////
+    // ergasia 2
+    double initarea = area;
+    if(algorithm.compare("local_search")== 0)
+        if (maxmin.compare("max") == 0){
+            result = localSearch_min(result, threshold, L, &area);
+        }
+        else{
+            result = localSearch_min(result, threshold, L, &area);
+        }
+
+
     auto stop = chrono::high_resolution_clock::now();
     auto duration1 = chrono::duration_cast<chrono::milliseconds>(stop - start);
 
@@ -97,14 +166,8 @@ int main (int argc, char **argv) {
 
     //write to file
     cout << "Writing result to " << outfile << "." << endl;
-    write_file(outfile, result, algorithm, edge_selection, initialization, area, convex_hull_area, duration);
-    
+    write_file(outfile, result, algorithm, maxmin, initarea, area, convex_hull_area, duration);
     cout << "Successfully wrote results to file " << outfile << "!" << endl;
-
-    //////////////////////////////////////////////////////////////////////////////
-    //new 
-    
-    result = localSearch(result, initialization, edge_selection, &area);
 
     return 0;
 }

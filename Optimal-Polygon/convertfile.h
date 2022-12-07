@@ -13,4 +13,4 @@ using namespace std;
 
 void open_file(ifstream &, string);
 int get_points(ifstream &, vector<Point_2> &);
-void write_file(string, Polygon_2, string, int, string, double, double, int);
+void write_file(string, Polygon_2, string,string, double , double, double, int);
