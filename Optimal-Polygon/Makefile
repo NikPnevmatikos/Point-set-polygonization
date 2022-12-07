@@ -258,6 +258,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+simulatedAnnealing.o: simulatedAnnealing.cpp.o
+
+.PHONY : simulatedAnnealing.o
+
+# target to build an object file
+simulatedAnnealing.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/simulatedAnnealing.cpp.o
+.PHONY : simulatedAnnealing.cpp.o
+
+simulatedAnnealing.i: simulatedAnnealing.cpp.i
+
+.PHONY : simulatedAnnealing.i
+
+# target to preprocess a source file
+simulatedAnnealing.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/simulatedAnnealing.cpp.i
+.PHONY : simulatedAnnealing.cpp.i
+
+simulatedAnnealing.s: simulatedAnnealing.cpp.s
+
+.PHONY : simulatedAnnealing.s
+
+# target to generate assembly for a file
+simulatedAnnealing.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/simulatedAnnealing.cpp.s
+.PHONY : simulatedAnnealing.cpp.s
+
 sort.o: sort.cpp.o
 
 .PHONY : sort.o
@@ -309,6 +336,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... simulatedAnnealing.o"
+	@echo "... simulatedAnnealing.i"
+	@echo "... simulatedAnnealing.s"
 	@echo "... sort.o"
 	@echo "... sort.i"
 	@echo "... sort.s"

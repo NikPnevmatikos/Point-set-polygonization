@@ -1,6 +1,7 @@
 #include "incremental.h"
 #include "convexHull.h"
 #include "localSearch.h"
+#include "simulatedAnnealing.h"
 #include "convertfile.h"
 #include <string.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
@@ -31,18 +32,18 @@ int main (int argc, char **argv) {
     double threshold;
 
 
-    //args can be accepted in any order
+    // arguments can be accepted in any order
     for (int i = 1; i < argc; i += 2) {
         if (strcmp(argv[i], "-i") == 0) {
             if (inputfile.empty() == false) {
-                perror("-i argument is given more than 1 times\n");
+                perror("-i argument is given more than 1 times.\n");
                 exit(1);
             }
             inputfile = argv[i + 1];
         }
         else if (strcmp(argv[i], "-o") == 0) {
             if (outfile.empty() == false) {
-                perror("-o argument is given more than 1 times\n");
+                perror("-o argument is given more than 1 times.\n");
                 exit(1);
             }
             outfile = argv[i + 1];;
@@ -50,7 +51,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-polygonInit") == 0) {
             if (polygonInit.empty() == false) {
-                perror("-polygonInit argument is given more than 1 times\n");
+                perror("-polygonInit argument is given more than 1 times.\n");
                 exit(1);
             }
             polygonInit = argv[i + 1];
@@ -58,7 +59,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-edge_selection") == 0) {
             if (edge_selection != 0) {
-                perror("-edge_selection argument is given more than 1 times\n");
+                perror("-edge_selection argument is given more than 1 times.\n");
                 exit(1);
             }
             edge_selection = atoi(argv[i + 1]);
@@ -66,7 +67,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-initialization") == 0) {
             if (initialization.empty() == false) {
-                perror("-initialization argument is given more than 1 times\n");
+                perror("-initialization argument is given more than 1 times.\n");
                 exit(1);
             }
             initialization = argv[i + 1];
@@ -74,7 +75,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-algorithm") == 0) {
             if (algorithm.empty() == false) {
-                perror("-initialization argument is given more than 1 times\n");
+                perror("-initialization argument is given more than 1 times.\n");
                 exit(1);
             }
             algorithm = argv[i + 1];
@@ -82,7 +83,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-max") == 0) {
             if (maxmin.empty() == false) {
-                perror("-initialization argument is given more than 1 times\n");
+                perror("-initialization argument is given more than 1 times.\n");
                 exit(1);
             }
             maxmin = "max";
@@ -91,7 +92,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-min") == 0) {
             if (maxmin.empty() == false) {
-                perror("-initialization argument is given more than 1 times\n");
+                perror("-initialization argument is given more than 1 times.\n");
                 exit(1);
             }
             maxmin = "min";
@@ -100,7 +101,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-L") == 0) {
             if (L != 0) {
-                perror("-edge_selection argument is given more than 1 times\n");
+                perror("-edge_selection argument is given more than 1 times.\n");
                 exit(1);
             }
             L = atoi(argv[i + 1]);
@@ -108,14 +109,14 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-threshold") == 0) {
             if (threshold != 0) {
-                perror("-edge_selection argument is given more than 1 times\n");
+                perror("-edge_selection argument is given more than 1 times.\n");
                 exit(1);
             }
             threshold = atof(argv[i + 1]);
 
         }
         else {
-            perror("unknown command given\n");
+            perror("Unknown command given\n");
             exit(1);
         }
     }
@@ -150,13 +151,17 @@ int main (int argc, char **argv) {
     //////////////////////////////////////////////////////////////////////////////
     // ergasia 2
     double initarea = area;
-    if(algorithm.compare("local_search")== 0)
+    if(algorithm.compare("local_search")== 0){
         if (maxmin.compare("max") == 0){
-            result = localSearch_min(result, threshold, L, &area);
+            result = localSearch_max(result, threshold, L, &area);
         }
         else{
             result = localSearch_min(result, threshold, L, &area);
         }
+    }
+    else{
+        result = simulatedAnnealing(result, threshold, L, &area);
+    }
 
 
     auto stop = chrono::high_resolution_clock::now();
