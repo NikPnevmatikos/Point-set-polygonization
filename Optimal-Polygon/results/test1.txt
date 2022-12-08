@@ -24,4 +24,4 @@ area_initial 3.77965e+06
 Area: 3.77965e+06
 ratio_initial: 0.722527
 ratio: 0.722527
-construction time: 3
+construction time: 2

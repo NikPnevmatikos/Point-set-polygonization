@@ -128,7 +128,7 @@ int main (int argc, char **argv) {
     cout << inputfile << endl;
     open_file(file, inputfile);
     
-    //extract convex hull area and 2d points from file
+    // extract convex hull area and 2d points from file
     long convex_hull_area = get_points(file, points);
 
     Polygon_2 result;
@@ -151,15 +151,15 @@ int main (int argc, char **argv) {
     //////////////////////////////////////////////////////////////////////////////
     // ergasia 2
     double initarea = area;
-    if(algorithm.compare("local_search")== 0){
-        if (maxmin.compare("max") == 0){
+    if (algorithm.compare("local_search")== 0){
+        if (maxmin.compare("max") == 0) {
             result = localSearch_max(result, threshold, L, &area);
         }
-        else{
+        else {
             result = localSearch_min(result, threshold, L, &area);
         }
     }
-    else{
+    else {
         result = simulatedAnnealing(result, threshold, L, &area);
     }
 
@@ -169,7 +169,7 @@ int main (int argc, char **argv) {
 
     int duration = duration1.count();
 
-    //write to file
+    // write to file
     cout << "Writing result to " << outfile << "." << endl;
     write_file(outfile, result, algorithm, maxmin, initarea, area, convex_hull_area, duration);
     cout << "Successfully wrote results to file " << outfile << "!" << endl;
