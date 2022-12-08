@@ -2,6 +2,12 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
+double fRand(double fMin, double fMax)
+{
+    double f = (double)rand() / RAND_MAX;
+    return fMin + f * (fMax - fMin);
+}
+
 bool seg_intersect(Segment_2 a, Segment_2 b){
     const auto result = intersection(a, b);
 
@@ -43,7 +49,7 @@ bool intersect(Triangle_2 a, vector<Point_2> points) {
 }
 
 
-Polygon_2 simulatedAnnealing(Polygon_2 paste, double threshold, int k, double* resultarea) {
+Polygon_2 simulatedAnnealing(Polygon_2 paste, double threshold, int L,double convex_area, double* resultarea) {
 
 
     srand (time(NULL));
@@ -63,340 +69,110 @@ Polygon_2 simulatedAnnealing(Polygon_2 paste, double threshold, int k, double* r
     pol.push_back(Point_2(2,1));
 
     //int threshold = 1000, k = 3;
-    double Da = *resultarea;
+    double area = *resultarea;
     for (const Segment_2& e : pol.edges()) {
         cout << e << endl;
     }
 
-    Polygon_2 copy = pol;
-    int randvertex = rand() % (copy.vertices().size()-3) +1;
-    cout << "rand pos " << randvertex << endl;
-    
-    Polygon_2::Vertex_iterator it = copy.vertices_begin();
+    Polygon_2 out;
+    CGAL::convex_hull_2(pol.begin(), pol.end(), std::back_inserter(out));
+    double c_area = abs(out.area());
 
-    Point_2 temp = *(it+randvertex);
-    *(it+randvertex) = *(it+randvertex+1); 
-    *(it+randvertex+1) = temp;
+    double T = 1;
+    double E = pol.vertices().size() * (1 - abs(area)/c_area);
+    double DE = E;
 
-
-    cout << "after" << endl;
-    for (const Segment_2& e : copy.edges()) {
-        cout << e << endl;
-    }
-
-    it = copy.vertices_begin();
-
-    Kd_Tree	tree(copy.vertices_begin(), copy.vertices_end());	
-
-    vector<Point_2> result;
-
-    Point_2 first = *(it + randvertex -1); 
-    int low_x = first.x(), low_y = first.y(), up_x = first.x() , up_y = first.y();
-    for (int i = 0; i < 3; i++) {
-        Point_2 point = *(it+randvertex+i); 
-        //cout << " point is " << point.x() << " " << point.y() << endl;
-        if (point.x() < low_x) {
-            low_x = point.x();
-        }
-        if (point.y() < low_y) {
-            low_y = point.y();
-        }
-        if (point.x() > up_x) {
-            up_x = point.x();
-        }
-        if (point.y() > up_y){
-            up_y = point.y();
-        }
-    }
-    cout << low_x << " , " << low_y << endl;
-    cout << up_x << " , " << up_y << endl;
-
-    Fuzzy_iso_box approximate_range(Point_2(low_x, low_y), Point_2(up_x, up_y));
-    tree.search(back_inserter(result), approximate_range);
-
-
-    for (int i = 0; i < result.size(); i++) {
-        cout << "box    " << result[i] << endl;
-    }
-
-    Triangle_2 a(Point_2(*(it + randvertex -1 )),Point_2(*(it + randvertex)),Point_2(*(it + randvertex+1)));
-    Triangle_2 b(Point_2(*(it + randvertex)),Point_2(*(it + randvertex +1)),Point_2(*(it + randvertex + 2)));
-    Segment_2 seg1(Point_2(*(it + randvertex -1 )), *(it + randvertex));
-    Segment_2 seg2(Point_2(*(it + randvertex + 1)), *(it + randvertex + 2 ));
-
-
-    if (seg_intersect(seg1,seg2) == false && intersect(a, result) == false && intersect(b, result) == false) {     
-        cout << "eimai komple sta trigwna mou <3" << endl;
-    }
-    else {
-        cout << "den mporei na ginei allagh" << endl;
-    }
-
-    cout << pol.area() << endl;
-    cout << copy.area() << endl;
-
-    // if (abs(pol.area()) < abs(copy.area())) {
-        
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Polygon_2 max = pol;
-    // while (Da >= threshold) {
-        
-    //     for (const Segment_2& e : pol.edges()) {
-    //         //Polygon_2 copy = pol;
-    //         cout << "----loop---- " << e << endl;
-    //         const Polygon_2::Vertices& range = pol.vertices();
-    //         int start, end, counter = 0;
+    while (T >= 0){
+        Polygon_2 copy = pol;
+        int loop = 0;
+        bool cannotChange = false;
+        while(loop < copy.vertices().size()){
+            int randvertex = rand() % (copy.vertices().size()-3) +1;
+            cout << "rand pos " << randvertex << endl;
             
-    //         for (auto it = range.begin(); it != range.end()-(k-1); it++) {
-    //             Polygon_2 copy = pol;
-    //             vector<Point_2> blueline;
-    //             cout << *it << endl;
+            Polygon_2::Vertex_iterator it = copy.vertices_begin();
 
-    //             // auto start = it;
-    //             // int i = 0;
-    //             bool flag = false;
-    //             start = counter;                                    // starting point of the blue line
-    //             end = counter + (k-1);                              // ending point of the blue line
-    //             for (int i = 0; i < k; i++) {
-    //                 //if (i > 0) {
-    //                     // if (*(it+i-1) == e.source() && *(it+i) == e.target()) {
-    //                     //     flag =  true;
-    //                     //     break;
-    //                     // }
-    //                 if ((*(it+i) == e.target()) || (*(it+i) == e.source())) {
-    //                     flag =  true;
-    //                     cout << "m[hka" << endl;
-    //                     break;
-    //                 }   
-    //                 //}
-    //                 blueline.insert(blueline.begin()+0,*(it+i));
-    //             }
+            Point_2 temp = *(it+randvertex);
+            *(it+randvertex) = *(it+randvertex+1); 
+            *(it+randvertex+1) = temp;
 
-    //             if (flag) {
-    //                 cout << "nooooo blue line" << endl;
-    //                 counter++;
-    //                 continue;
-    //             }
-    //             cout << "blue line" << endl;
-    //             cout << "start " << start << endl;
-    //             cout << "end " << end << endl;
-    //             for (int i = 0; i < blueline.size(); i++) {
-    //                 cout << "  " << blueline[i] << endl;
-    //             }
-    //             cout << "stop blueline" << endl;
 
-    //             // if (copy.vertices_begin()+end == copy.end()) {
-    //             //     copy.erase(copy.vertices_begin()+start, copy.vertices_begin()+0);
-    //             // }
-    //             //else {
-    //             copy.erase(copy.vertices_begin()+start, copy.vertices_begin()+end+1);
-    //             // }
-    //             // for (const Segment_2& e : pol.edges()) {
+            cout << "after" << endl;
+            for (const Segment_2& e : copy.edges()) {
+                cout << e << endl;
+            }
 
-    //             //     cout <<  " delete     " << e << endl;
-    //             // }
-    //             //cout << " seg " << seg << endl;
-    //             int insert = 0;
-    //             //const Polygon_2::Vertices& findvertix = copy.vertices();
-    //             int j = 0;
-    //             for (const Point_2& p : copy.vertices()) {
-                    
-    //                 if (p == Point_2(e.target())) {
-    //                     //cout << " j and it " << j <<  " " << *(it) << endl;
-    //                     copy.insert(copy.vertices_begin() + j, blueline.begin(), blueline.end());
-    //                     break;
-    //                 }
-    //                 j++;
-    //             }
+            it = copy.vertices_begin();
 
-    //             for (const Segment_2& e : copy.edges()) {
+            Kd_Tree	tree(copy.vertices_begin(), copy.vertices_end());	
 
-    //                 cout <<  " posiball     " << e << endl;
-    //             }
+            vector<Point_2> result;
 
-    //             cout << "copy area" << abs(copy.area()) << endl;
-    //             cout << "max area" << abs(max.area()) << endl;
-    //             if (copy.is_simple() == true) { 
-    //                 if (abs(copy.area()) > abs(max.area())) {
-    //                     max = copy;
-    //                     cout << "change" << endl;
-    //                 }
-    //             }
-                      
-    //             counter++;
-    //         }
-            
-    //     }
-    //     pol = max;
-    //     if(max.area() -  pol.area() == Da){
-    //         break;
-    //     }
-    //     Da = max.area() -  pol.area();
-    // }
+            Point_2 first = *(it + randvertex -1); 
+            int low_x = first.x(), low_y = first.y(), up_x = first.x() , up_y = first.y();
+            for (int i = 0; i < 3; i++) {
+                Point_2 point = *(it+randvertex+i); 
+                //cout << " point is " << point.x() << " " << point.y() << endl;
+                if (point.x() < low_x) {
+                    low_x = point.x();
+                }
+                if (point.y() < low_y) {
+                    low_y = point.y();
+                }
+                if (point.x() > up_x) {
+                    up_x = point.x();
+                }
+                if (point.y() > up_y){
+                    up_y = point.y();
+                }
+            }
+            cout << low_x << " , " << low_y << endl;
+            cout << up_x << " , " << up_y << endl;
 
-    // pol = max;
-    // for (const Segment_2& e : pol.edges()) {
+            Fuzzy_iso_box approximate_range(Point_2(low_x, low_y), Point_2(up_x, up_y));
+            tree.search(back_inserter(result), approximate_range);
 
-    //     cout <<  " final     " << e << endl;
-    // }
-    // cout << "Max area found " << abs(pol.area()) << endl;
 
-    // *resultarea = abs(pol.area());
+            for (int i = 0; i < result.size(); i++) {
+                cout << "box    " << result[i] << endl;
+            }
+
+            Triangle_2 a(Point_2(*(it + randvertex -1 )),Point_2(*(it + randvertex)),Point_2(*(it + randvertex+1)));
+            Triangle_2 b(Point_2(*(it + randvertex)),Point_2(*(it + randvertex +1)),Point_2(*(it + randvertex + 2)));
+            Segment_2 seg1(Point_2(*(it + randvertex -1 )), *(it + randvertex));
+            Segment_2 seg2(Point_2(*(it + randvertex + 1)), *(it + randvertex + 2 ));
+
+
+            if (seg_intersect(seg1,seg2) == false && intersect(a, result) == false && intersect(b, result) == false) {     
+                cout << "eimai komple sta trigwna mou <3" << endl;
+                break;
+            }
+            else {
+                cout << "no <3" << endl;
+                if(loop == copy.vertices().size()-1){
+                    cannotChange = true;
+                }
+                copy = pol;
+            }
+
+            loop++;
+        }
+
+        if(cannotChange == true){
+            break;
+        }
+        double newE = copy.vertices().size() * (1 - abs(copy.area())/c_area);
+        double R = fRand(0,1);
+        DE = E - newE;
+        if(DE < 0 || (exp(-DE/T)) >= R){
+            pol = copy;
+            E = newE;
+        }
+        T -= 1/L;
+        cout << "next loop" << endl;
+    }
+
+    *resultarea = abs(pol.area());
+    cout << "final area " << *resultarea << endl;
     return pol;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Polygon_2 localSearch_min(Polygon_2 pol, double threshold, int k, double* resultarea) {
-
-//     // Polygon_2 pol;
-//     // pol.push_back(Point_2(2,2));
-//     // pol.push_back(Point_2(2,5));
-//     // pol.push_back(Point_2(0,7));
-//     // pol.push_back(Point_2(4,6));
-//     // pol.push_back(Point_2(6,5));
-//     // pol.push_back(Point_2(7,5));
-//     // pol.push_back(Point_2(9,8));
-//     // pol.push_back(Point_2(11,2));
-//     // pol.push_back(Point_2(8,1));
-//     // pol.push_back(Point_2(4,3));
-
-//     //int threshold = 1000, k = 3;
-//     double Da = *resultarea;
-//     for (const Segment_2& e : pol.edges()) {
-//         cout << e << endl;
-//     }
-
-
-//     Polygon_2 min = pol;
-//     while (Da >= threshold) {
-        
-//         for (const Segment_2& e : pol.edges()) {
-//             //Polygon_2 copy = pol;
-//             cout << "----loop---- " << e << endl;
-//             const Polygon_2::Vertices& range = pol.vertices();
-//             int start, end, counter = 0;
-            
-//             for (auto it = range.begin(); it != range.end()-(k-1); it++) {
-//                 Polygon_2 copy = pol;
-//                 vector<Point_2> blueline;
-//                 cout << *it << endl;
-
-//                 bool flag = false;
-//                 start = counter;                                    // starting point of the blue line
-//                 end = counter + (k-1);                              // ending point of the blue line
-//                 for (int i = 0; i < k; i++) {
-
-//                     if ((*(it+i) == e.target()) || (*(it+i) == e.source())) {
-//                         flag =  true;
-//                         cout << "m[hka" << endl;
-//                         break;
-//                     }   
-
-//                     blueline.insert(blueline.begin()+0,*(it+i));
-//                 }
-
-//                 if (flag) {
-//                     cout << "nooooo blue line" << endl;
-//                     counter++;
-//                     continue;
-//                 }
-//                 cout << "blue line" << endl;
-//                 cout << "start " << start << endl;
-//                 cout << "end " << end << endl;
-//                 for (int i = 0; i < blueline.size(); i++) {
-//                     cout << "  " << blueline[i] << endl;
-//                 }
-//                 cout << "stop blueline" << endl;
-
-//                 copy.erase(copy.vertices_begin()+start, copy.vertices_begin()+end+1);
-
-//                 int insert = 0;
-//                 //const Polygon_2::Vertices& findvertix = copy.vertices();
-//                 int j = 0;
-//                 for (const Point_2& p : copy.vertices()) {
-                    
-//                     if (p == Point_2(e.target())) {
-//                         //cout << " j and it " << j <<  " " << *(it) << endl;
-//                         copy.insert(copy.vertices_begin() + j, blueline.begin(), blueline.end());
-//                         break;
-//                     }
-//                     j++;
-//                 }
-
-//                 for (const Segment_2& e : copy.edges()) {
-
-//                     cout <<  " posiball     " << e << endl;
-//                 }
-
-//                 cout << "copy area" << abs(copy.area()) << endl;
-//                 cout << "min area" << abs(min.area()) << endl;
-//                 if (copy.is_simple() == true) { 
-//                     if (abs(copy.area()) < abs(min.area())) {
-//                         min = copy;
-//                         cout << "change" << endl;
-//                     }
-//                 }
-                      
-//                 counter++;
-//             }
-            
-//         }
-//         pol = min;
-//         if(min.area() -  pol.area() == Da){
-//             break;
-//         }
-//         Da = min.area() -  pol.area();
-//     }
-
-//     pol = min;
-//     for (const Segment_2& e : pol.edges()) {
-
-//         cout <<  " final     " << e << endl;
-//     }
-//     cout << "min area found " << abs(pol.area()) << endl;
-
-//     *resultarea = abs(pol.area());
-//     return pol;
-// }
