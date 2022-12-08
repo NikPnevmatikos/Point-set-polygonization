@@ -160,7 +160,7 @@ int main (int argc, char **argv) {
         }
     }
     else {
-        result = simulatedAnnealing(result, threshold, L, &area);
+        result = simulatedAnnealing(result, threshold, L,convex_hull_area, &area);
     }
 
 

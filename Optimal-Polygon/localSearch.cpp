@@ -83,11 +83,11 @@ Polygon_2 localSearch_max(Polygon_2 pol, double threshold, int k, double* result
         }
         // max area of the polygon has been found 
         // if Da is reached, stop, else continue
-        pol = max;
         if (max.area() - pol.area() == Da) {
             break;
         }
         Da = max.area() - pol.area();
+        pol = max;
     }
 
     pol = max;
@@ -171,11 +171,11 @@ Polygon_2 localSearch_min(Polygon_2 pol, double threshold, int k, double* result
         }
         // min area of the polygon has been found 
         // if Da is reached, stop, else continue
-        pol = min;
         if(min.area() -  pol.area() == Da){
             break;
         }
         Da = min.area() -  pol.area();
+        pol = min;
     }
 
     pol = min;
