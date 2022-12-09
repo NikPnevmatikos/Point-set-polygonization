@@ -150,6 +150,10 @@ int main (int argc, char **argv) {
 
     //////////////////////////////////////////////////////////////////////////////
     // ergasia 2
+
+    if(result.is_simple() == true){
+        cout << "einai apo prin" << endl;
+    }
     double initarea = area;
     if (algorithm.compare("local_search")== 0){
         if (maxmin.compare("max") == 0) {
@@ -160,10 +164,12 @@ int main (int argc, char **argv) {
         }
     }
     else {
-        result = simulatedAnnealing(result, threshold, L,convex_hull_area, &area);
+        result = simulatedAnnealing_global(result, threshold, L,convex_hull_area, &area);
     }
 
-
+    if(result.is_simple() == true){
+        cout << "NAI GTXM" << endl;
+    }
     auto stop = chrono::high_resolution_clock::now();
     auto duration1 = chrono::duration_cast<chrono::milliseconds>(stop - start);
 

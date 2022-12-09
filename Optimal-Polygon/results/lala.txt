@@ -29,8 +29,8 @@ Optimal Area Polygonization
 2670 560
 1986 54
 1140 622
-540 1440
 1062 408
+540 1440
 724 1006
 624 712
 662 672
@@ -73,9 +73,9 @@ Optimal Area Polygonization
 2338 586 2670 560
 2670 560 1986 54
 1986 54 1140 622
-1140 622 540 1440
-540 1440 1062 408
-1062 408 724 1006
+1140 622 1062 408
+1062 408 540 1440
+540 1440 724 1006
 724 1006 624 712
 624 712 662 672
 662 672 768 384
@@ -91,7 +91,7 @@ Optimal Area Polygonization
 206 2442 76 1632
 Algorithm: simulated_annealing_max
 area_initial 3.77965e+06
-Area: 3.5968e+06
+Area: 3.77965e+06
 ratio_initial: 0.722527
-ratio: 0.687574
-construction time: 96
+ratio: 0.722527
+construction time: 1

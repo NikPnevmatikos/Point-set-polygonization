@@ -49,24 +49,24 @@ bool intersect(Triangle_2 a, vector<Point_2> points) {
 }
 
 
-Polygon_2 simulatedAnnealing(Polygon_2 paste, double threshold, int L,double convex_area, double* resultarea) {
+Polygon_2 simulatedAnnealing(Polygon_2 pol, double threshold, int L,double convex_area, double* resultarea) {
 
 
     srand (time(NULL));
 
-    Polygon_2 pol;
-    pol.push_back(Point_2(1,0));
-    pol.push_back(Point_2(1,3));
-    pol.push_back(Point_2(3,3));
-    //pol.push_back(Point_2(4,2));
-    //pol.push_back(Point_2(4,3));
-    pol.push_back(Point_2(4,5));
-    pol.push_back(Point_2(7,6));
-    pol.push_back(Point_2(8,5));
-    pol.push_back(Point_2(8,0));
-    pol.push_back(Point_2(6,0));
-    pol.push_back(Point_2(5,4));
-    pol.push_back(Point_2(2,1));
+    // Polygon_2 pol;
+    // pol.push_back(Point_2(1,0));
+    // pol.push_back(Point_2(1,3));
+    // pol.push_back(Point_2(3,3));
+    // //pol.push_back(Point_2(4,2));
+    // //pol.push_back(Point_2(4,3));
+    // pol.push_back(Point_2(4,5));
+    // pol.push_back(Point_2(7,6));
+    // pol.push_back(Point_2(8,5));
+    // pol.push_back(Point_2(8,0));
+    // pol.push_back(Point_2(6,0));
+    // pol.push_back(Point_2(5,4));
+    // pol.push_back(Point_2(2,1));
 
     //int threshold = 1000, k = 3;
     double area = *resultarea;
@@ -78,10 +78,15 @@ Polygon_2 simulatedAnnealing(Polygon_2 paste, double threshold, int L,double con
     CGAL::convex_hull_2(pol.begin(), pol.end(), std::back_inserter(out));
     double c_area = abs(out.area());
 
-    double T = 1;
-    double E = pol.vertices().size() * (1 - abs(area)/c_area);
+
+    Kd_Tree	tree(pol.vertices_begin(), pol.vertices_end());
+    
+    double T = 1.0;
+    double E = pol.vertices().size() * (abs(area)/c_area);
+
     double DE = E;
 
+    Polygon_2 max = pol;
     while (T >= 0){
         Polygon_2 copy = pol;
         int loop = 0;
@@ -104,7 +109,7 @@ Polygon_2 simulatedAnnealing(Polygon_2 paste, double threshold, int L,double con
 
             it = copy.vertices_begin();
 
-            Kd_Tree	tree(copy.vertices_begin(), copy.vertices_end());	
+            // Kd_Tree	tree(copy.vertices_begin(), copy.vertices_end());	
 
             vector<Point_2> result;
 
@@ -147,32 +152,177 @@ Polygon_2 simulatedAnnealing(Polygon_2 paste, double threshold, int L,double con
                 cout << "eimai komple sta trigwna mou <3" << endl;
                 break;
             }
-            else {
-                cout << "no <3" << endl;
-                if(loop == copy.vertices().size()-1){
-                    cannotChange = true;
-                }
-                copy = pol;
+
+            cout << "no <3" << endl;
+            if(loop == copy.vertices().size()-1){
+                cannotChange = true;
             }
+            copy = pol;
+            
 
             loop++;
         }
 
         if(cannotChange == true){
+            cout << "ekana " << endl;
             break;
         }
-        double newE = copy.vertices().size() * (1 - abs(copy.area())/c_area);
+        
+        double newE = copy.vertices().size() * (abs(copy.area())/c_area);
+        
         double R = fRand(0,1);
         DE = E - newE;
+        cout << "asnlskd " << 1 - abs(area)/c_area << endl;
+        
         if(DE < 0 || (exp(-DE/T)) >= R){
             pol = copy;
             E = newE;
+            T = T - 1.0/L;
+
+            // if(abs(pol.area()) > abs(max.area())) {
+            //     max = pol;
+            // }
         }
-        T -= 1/L;
-        cout << "next loop" << endl;
+
+        //sleep(5);
+
     }
+
+    //pol = max;
 
     *resultarea = abs(pol.area());
     cout << "final area " << *resultarea << endl;
     return pol;
+}
+
+
+
+Polygon_2 simulatedAnnealing_global(Polygon_2 pol, double threshold, int L,double convex_area, double* resultarea) {
+
+    srand(time(NULL));
+    // Polygon_2 pol;
+    // pol.push_back(Point_2(1,0));
+    // pol.push_back(Point_2(1,3));
+    // pol.push_back(Point_2(3,3));
+    // //pol.push_back(Point_2(4,2));
+    // //pol.push_back(Point_2(4,3));
+    // pol.push_back(Point_2(4,5));
+    // pol.push_back(Point_2(7,6));
+    // pol.push_back(Point_2(8,5));
+    // pol.push_back(Point_2(8,0));
+    // pol.push_back(Point_2(6,0));
+    // pol.push_back(Point_2(5,4));
+    // pol.push_back(Point_2(2,1));
+
+    //int threshold = 1000, k = 3;
+    double area = *resultarea;
+    for (const Segment_2& e : pol.edges()) {
+        cout << e << endl;
+    }
+
+    Polygon_2 out;
+    CGAL::convex_hull_2(pol.begin(), pol.end(), std::back_inserter(out));
+    double c_area = abs(out.area());
+
+    
+    double T = 1.0;
+    double E = pol.vertices().size() * (abs(area)/convex_area);
+
+    double DE = E;
+
+    while(T>=0){
+
+        Polygon_2 copy = pol;
+        int loop = 0;
+        bool cannotChange = false;
+        while(loop < copy.vertices().size()){
+            int randvertex = rand() % (copy.vertices().size()-1) +1;
+            int randedge = rand() % (copy.vertices().size()-2) +1;
+
+            cout << randvertex << "\t" << randedge << ", " << randedge+1 << endl;
+            
+            while (randvertex == randedge || randvertex == randedge+1){
+                cout << "anapiro" << endl;
+                randedge = rand() % (copy.vertices().size()-2) +1;
+            }
+
+            
+
+            Polygon_2::Vertex_iterator it = copy.vertices_begin();
+            
+            Segment_2 seg(Point_2(*(it+randedge)),Point_2(*(it+randedge+1)));
+            cout << "seg " << seg << endl;
+
+            Point_2 to_be_inserted = *(it+randvertex);
+            copy.erase(copy.vertices_begin()+randvertex);
+
+            // if (seg.source() == *(it+randedge-1)){
+            //     randedge -= 1;
+            // }
+
+            // copy.insert(copy.vertices_begin() + randedge, to_be_inserted);
+
+            int insert = 0;
+            int j = 0;
+            // insert the blue line, starting from the target of the edge
+            for (const Point_2& p : copy.vertices()) {
+                if (p == seg.target()) {
+                    cout << "before " << seg.target() << endl;
+                    copy.insert(copy.vertices_begin() + j, to_be_inserted);
+                    break;
+                }
+                j++;
+            }
+
+            cout << "hello" << endl;
+            for (const Segment_2& e : copy.edges()) {
+                cout << e << endl;
+            }
+
+            if(copy.is_simple() == true){
+                //break;
+                cout << "giname" << endl;
+                break;
+            }
+
+            cout << "no <3" << endl;
+            if(loop == copy.vertices().size()-1){
+                cannotChange = true;
+            }
+
+            copy = pol;
+            loop++;
+        }
+
+
+        if(cannotChange == true){
+            cout << "ekana " << endl;
+            break;
+        }
+
+        double newE = copy.vertices().size() * (abs(copy.area())/convex_area);
+        
+        double R = fRand(0,1);
+        DE = E - newE;
+        cout << "asnlskd " << 1 - abs(area)/c_area << endl;
+        
+        if(DE < 0 || (exp(-DE/T)) >= R){
+            pol = copy;
+            E = newE;
+            T = T - 1.0/L;
+
+            // if(abs(pol.area()) > abs(max.area())) {
+            //     max = pol;
+            // }
+        }
+
+        //sleep(5);
+
+    }
+
+
+    *resultarea = abs(pol.area());
+    cout << "final area " << *resultarea << endl;
+    return pol;
+
 }

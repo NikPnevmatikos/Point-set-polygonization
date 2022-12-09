@@ -89,6 +89,7 @@ int main (int argc, char **argv) {
         result = convex_hull(points, edge_selection, &area);
     }
     
+    
     auto stop = chrono::high_resolution_clock::now();
     auto duration1 = chrono::duration_cast<chrono::milliseconds>(stop - start);
 
