@@ -5,17 +5,6 @@
 
 Polygon_2 localSearch_max(Polygon_2 pol, double threshold, int k, double* resultarea) {
 
-    // Polygon_2 pol;
-    // pol.push_back(Point_2(2,2));
-    // pol.push_back(Point_2(2,5));
-    // pol.push_back(Point_2(0,7));
-    // pol.push_back(Point_2(4,6));
-    // pol.push_back(Point_2(6,5));
-    // pol.push_back(Point_2(7,5));
-    // pol.push_back(Point_2(9,8));
-    // pol.push_back(Point_2(11,2));
-    // pol.push_back(Point_2(8,1));
-    // pol.push_back(Point_2(4,3));
 
     double Da = *resultarea;
     Polygon_2 max = pol;

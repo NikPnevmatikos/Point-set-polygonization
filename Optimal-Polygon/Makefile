@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/users/sdi1900052/Point-set-polygonization/Optimal-Polygon
+CMAKE_SOURCE_DIR = /home/users/sdi1900157/Point-set-polygonization/Optimal-Polygon
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/users/sdi1900052/Point-set-polygonization/Optimal-Polygon
+CMAKE_BINARY_DIR = /home/users/sdi1900157/Point-set-polygonization/Optimal-Polygon
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/users/sdi1900052/Point-set-polygonization/Optimal-Polygon/CMakeFiles /home/users/sdi1900052/Point-set-polygonization/Optimal-Polygon/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/users/sdi1900157/Point-set-polygonization/Optimal-Polygon/CMakeFiles /home/users/sdi1900157/Point-set-polygonization/Optimal-Polygon/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/users/sdi1900052/Point-set-polygonization/Optimal-Polygon/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/users/sdi1900157/Point-set-polygonization/Optimal-Polygon/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -258,6 +258,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+optimal_convex.o: optimal_convex.cpp.o
+
+.PHONY : optimal_convex.o
+
+# target to build an object file
+optimal_convex.cpp.o:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/optimal_convex.cpp.o
+.PHONY : optimal_convex.cpp.o
+
+optimal_convex.i: optimal_convex.cpp.i
+
+.PHONY : optimal_convex.i
+
+# target to preprocess a source file
+optimal_convex.cpp.i:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/optimal_convex.cpp.i
+.PHONY : optimal_convex.cpp.i
+
+optimal_convex.s: optimal_convex.cpp.s
+
+.PHONY : optimal_convex.s
+
+# target to generate assembly for a file
+optimal_convex.cpp.s:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/optimal_convex.cpp.s
+.PHONY : optimal_convex.cpp.s
+
 simulatedAnnealing.o: simulatedAnnealing.cpp.o
 
 .PHONY : simulatedAnnealing.o
@@ -336,6 +363,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... optimal_convex.o"
+	@echo "... optimal_convex.i"
+	@echo "... optimal_convex.s"
 	@echo "... simulatedAnnealing.o"
 	@echo "... simulatedAnnealing.i"
 	@echo "... simulatedAnnealing.s"

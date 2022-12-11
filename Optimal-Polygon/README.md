@@ -1,4 +1,4 @@
-# Point-set-polygonization
+# Point-set-polygonization / Optimal-Polygon
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Name:   Nikolaos Pnevmatikos 
@@ -11,14 +11,15 @@ AM:     1115201900052
 compile:
 
     cgal_create_CMakeLists -s main
-    cmake -DCGAL_DIR=/user/lib/CGAL .
+    cmake -DCGAL_DIR=/user/lib/CGAL -DCMAKE_BUILD_TYPE=Release .
     make
 
 run:
 
-    $./to_polygon –i <point set input file> –ο <output file> –algorithm <incremental or
+    $./to_polygon –i <point set input file> –ο <output file> polygonInit <incremental or
     convex_hull> -edge_selection <1 or 2 or 3> -initialization <1a
-    or 1b or 2a or 2b | only in incremental>  
+    or 1b or 2a or 2b | only in incremental>  –algorithm <local_search or simulated_annealing or ant_colony> -L [L parameter according to algorithm] –max [maximal area polygonization] –min [minimal area polygonization] –threshold <double> [in local search] –annealing <"local" or
+    "global" or "subdivision" in simulated annealing>
 
 To compile and run the program you can use the exe.sh bash script:
 
@@ -42,73 +43,80 @@ Show a graph of the polygon:
 
 Files used:
     
-    convertfile.h
-    convertfile.cpp     
-                        (contains functions that opens a file, extract points from file 
-                        to vector<Point_2> and writes result to output file)
-    
+    convertfile.h           (contains functions that opens a file, extract points from file 
+    convertfile.cpp         to vector<Point_2> and writes result to output file)
+                        
     convexHull.h
-    convexHull.cpp      (implementation of the second algorithm)
+    convexHull.cpp          (implementation of the second algorithm)
     
     incremental.h
-    incremental.cpp     (implementation of the first algorithm)
+    incremental.cpp         (implementation of the first algorithm)
     
     sort.h
-    sort.cpp            (containing the sorting algorithms)
+    sort.cpp                (containing the sorting algorithms)
     
-    main.cpp            (execution of program)
+    main.cpp                (execution of program)
     
-    polygonprint.py     (prints the polygon in a graph)
+    polygonprint.py         (prints the polygon in a graph)
 
-    exe.sh              (used to compile and run the programs)
+    exe.sh                  (used to compile and run the programs)
+
+
+New Files Added:
+
+    localSearch.h
+    localSearch.cpp         (implementation for the local Search algorithm)
+
+    optimal_convex.h
+    optimal_convex.cpp      (updated convex hull algorithm for the sub-division)
+
+    simulatedAnnealing.h
+    simulatedAnnealing.cpp (implementation for the simulatedAnnealing algorithm)
     
 
 
 Program Description:
 
-    We implemented the first two algorithms of the project.
+    We implemented the first two algorithms of the second project.
 
     ~ For the first algorihm:
         
-        We used 2 polygons. A convex hull polygon and the final simple polygon.
-        First, sort the points according to the input arguments.
-        Then, the algorithm creates a triangle with the first 3 points it finds,
-        according to the sorting it was given. 
-        
-        The following run repeatedly, until all the points have been inserted to the polygon
-        and the final area has been found.
-        For each point:
-            Finds the red edges on the convex hull polygon(visible edges from the point). 
-            After finding the red edges, find the green edges of the final polygon.
-            Pick the edge with the most beneficial triangle (greedy algorithm) for the final area 
-            of the polygon.(max, min or random area)
-            Connect the point to the edge picked in the previous step,
-            Update the current area of the polygon
-            And last, update the convex hull polygon.
+        We follow the pseudocode shown to us in the class. From the result polygon of the first two algorithms, 
+            iterate all the edges
+                for every edge find all k-paths
+                    for every k path apply the local step, check if the polygon is simple and if
+                    it is find if the new polygon has better area (min or max area)
+            
+            apply changes
+        repeat until da < threshold
+
 
     ~ For the second algorithm
-        (for the visibility check we used the is_visible function of algorithm 1 in incremental.cpp file):
+        
+        Local Step Algorithm: 
+            Pick a random vertex k and swap it with the next one.  
+            Check if (k-1, k) edge and (k+1, k+2) edge intersect with each other (creating an X). 
+            If not, then take the (k-1, k, k+1) and (k, k+1, k+2) triangles and 
+            check if a vertex exist inside any of the two triangles we created. 
+            If the above is false calculated the DE and metropolis criterion.
+            If DE < 0 or the metropolis criterion is true, apply the changes
 
-        First, create the convex hull polygon. After thet, remove from vector all vertices that 
-        belong to the polygonal line of convex hull.
-
-        While the inside points (the points that are not inserted to the polygon yet) exist:
-            For each edge of polygon:
-                Find the closest inside point, check its visibility and, then, if it is visible calculate 
-                the area of the triangle it makes with the edge.
-            
-            Pick the point and edge with the most beneficial area (depending on the argument we picked:
-            min, max or random)
-            Insert it to the polygon and update the area of the polygon.
+        Global Step Algorithm: 
+            It's the same as local search Algorithm, with L = 1.
+                
+        Subdivisition Algorithm:
+            Sort all the points and divide them into ceil([n-1]/[m-1]) parts. Each part will have a common point.
+            For each sub-polygon created, calculate the polygon using convex hull algorithm and then 
+            improve the area using the global step algorithm. 
+            When all ceil([n-1]/[m-1]) sub-polygons are created merge them together and create the final polygon.
 
 Observations:
 
-    While testing the two algorithms, we came to the conclusion that the second algorithm
-    is much slower than the first one. More specificly, for 600 points the second algorithm 
-    runs for about an hour, while the first one for seconds.
-    Both algorithms are greedy, because they don't guarantee that the final area is the maximum
-    possible area or the minimum possible, but they do a pretty good job to find the maximum/minimum area approximately.
+    While testing the two algorithms, we came to the conclusion that the first algorithm
+    is much slower than the first one. 
+    Both algorithms improve the final area of the polygon produced by incremental or convex hull algorithms, but the Local Search algorithm although slower it does a much better job finding the best area approximatelly.
 
-Some examples can be found in the testcases/results folders, images can be found in images folder. 
+    
+Some examples can be found in the testcases/results folders, images of the polygon results can be found in images folder. 
     
     

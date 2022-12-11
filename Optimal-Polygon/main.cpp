@@ -28,8 +28,9 @@ int main (int argc, char **argv) {
 
     string algorithm;
     string maxmin;
-    int L;
-    double threshold;
+    int L = 0;
+    double threshold = 0;
+    string annealing;
 
 
     // arguments can be accepted in any order
@@ -75,7 +76,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-algorithm") == 0) {
             if (algorithm.empty() == false) {
-                perror("-initialization argument is given more than 1 times.\n");
+                perror("-algorithm argument is given more than 1 times.\n");
                 exit(1);
             }
             algorithm = argv[i + 1];
@@ -83,7 +84,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-max") == 0) {
             if (maxmin.empty() == false) {
-                perror("-initialization argument is given more than 1 times.\n");
+                perror("-max argument is given more than 1 times.\n");
                 exit(1);
             }
             maxmin = "max";
@@ -92,16 +93,24 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-min") == 0) {
             if (maxmin.empty() == false) {
-                perror("-initialization argument is given more than 1 times.\n");
+                perror("-min argument is given more than 1 times.\n");
                 exit(1);
             }
             maxmin = "min";
             i--;
 
         }
+        else if (strcmp(argv[i], "-annealing") == 0) {
+            if (annealing.empty() == false) {
+                perror("-annealing argument is given more than 1 times.\n");
+                exit(1);
+            }
+            annealing = argv[i+1];
+
+        }
         else if (strcmp(argv[i], "-L") == 0) {
             if (L != 0) {
-                perror("-edge_selection argument is given more than 1 times.\n");
+                perror("-L argument is given more than 1 times.\n");
                 exit(1);
             }
             L = atoi(argv[i + 1]);
@@ -109,7 +118,7 @@ int main (int argc, char **argv) {
         }
         else if (strcmp(argv[i], "-threshold") == 0) {
             if (threshold != 0) {
-                perror("-edge_selection argument is given more than 1 times.\n");
+                perror("-threshold argument is given more than 1 times.\n");
                 exit(1);
             }
             threshold = atof(argv[i + 1]);
@@ -133,29 +142,24 @@ int main (int argc, char **argv) {
 
     Polygon_2 result;
     double area; 
+
+    cout << "Starting " << polygonInit << " algorithm" <<endl;
     if (polygonInit.compare("incremental") == 0) {
         result = incremental(points, initialization, edge_selection, &area);
     }
-    else if(polygonInit.compare("convex_hull") == 0){
+    else if (polygonInit.compare("convex_hull") == 0) {
         result = convex_hull(points, edge_selection, &area);
     }
-    
 
-
-    // //write to file
-    // cout << "Writing result to " << outfile << "." << endl;
-    // write_file(outfile, result, polygonInit, edge_selection, initialization, area, convex_hull_area, duration);
-    
-    // cout << "Successfully wrote results to file " << outfile << "!" << endl;
 
     //////////////////////////////////////////////////////////////////////////////
     // ergasia 2
 
-    if(result.is_simple() == true){
-        cout << "einai apo prin" << endl;
-    }
+
+    cout << "Starting " << algorithm << " algorithm" <<endl;
+    
     double initarea = area;
-    if (algorithm.compare("local_search")== 0){
+    if (algorithm.compare("local_search")== 0) {
         if (maxmin.compare("max") == 0) {
             result = localSearch_max(result, threshold, L, &area);
         }
@@ -164,12 +168,17 @@ int main (int argc, char **argv) {
         }
     }
     else {
-        result = simulatedAnnealing_global(result, threshold, L,convex_hull_area, &area);
+        if (annealing.compare("local") == 0) {
+            result = simulatedAnnealing(result, L, convex_hull_area, maxmin, &area);
+        }
+        else if (annealing.compare("global") == 0) {
+            result = simulatedAnnealing_global(result,L,convex_hull_area,maxmin, &area);
+        }
+        else{
+            result = simulatedAnnealing_subdivision(points, L, convex_hull_area,maxmin, &area);
+        }
     }
 
-    if(result.is_simple() == true){
-        cout << "NAI GTXM" << endl;
-    }
     auto stop = chrono::high_resolution_clock::now();
     auto duration1 = chrono::duration_cast<chrono::milliseconds>(stop - start);
 
