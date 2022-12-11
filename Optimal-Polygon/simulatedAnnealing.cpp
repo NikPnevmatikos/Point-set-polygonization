@@ -452,7 +452,7 @@ Polygon_2 simulatedAnnealing_subdivision(vector<Point_2> points, int L, double c
     sort(points.begin(), points.end(), increasing);
 
     vector<vector<Point_2>> set_of_points;      // each vector contains the points for the sub-polygons
-    int m = 4;
+    int m = 100;
     bool flag = false;
     vector<Point_2> subPoints;
     for (int i = 0; i < points.size(); i++) {
