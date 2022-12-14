@@ -1,5 +1,5 @@
 # Point-set-polygonization
-Given a set of 2D Points, create a simple Polygon with min or max
+Given a set of 2D Points, create a simple Polygon with min or max area
 
 
  **[Point Set Polygonization](./Point-Set-Polygonization):** Implement two greedy algorithms(inremental or convex_hull) to find the min/max area approximately\
