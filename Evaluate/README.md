@@ -1,4 +1,4 @@
-# Point-set-polygonization / Optimal-Polygon
+# Point-set-polygonization / Evaluate
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Name:   Nikolaos Pnevmatikos 
@@ -15,11 +15,7 @@ compile:
     make
 
 run:
-
-    $./to_polygon –i <point set input file> –ο <output file> polygonInit <incremental or
-    convex_hull> -edge_selection <1 or 2 or 3> -initialization <1a
-    or 1b or 2a or 2b | only in incremental>  –algorithm <local_search or simulated_annealing or ant_colony> -L [L parameter according to algorithm] –max [maximal area polygonization] –min [minimal area polygonization] –threshold <double> [in local search] –annealing <"local" or
-    "global" or "subdivision" in simulated annealing>
+    $./main -i <point set path> -ο <output file>
 
 To compile and run the program you can use the exe.sh bash script:
 
@@ -29,16 +25,26 @@ To compile and run the program you can use the exe.sh bash script:
 
 Input file should be in this form:
 
-    # <description of point set>
-    # parameters "convex_hull": {"area": "Χ"} / x is the area of convex hull 
-    0 x0 y0
-    1 x1 y1
-    … … …
-    n-1 xn yn
-
-Show a graph of the polygon:
-
-    python polygonprint.py <filename>
+         || <Algorithm 1>                                 || <Algorithm 2>           || . . .
+    Size || min score | max score | min bound | max bound || <same cols as previously>
+    10   || <double> | <double> | <double> | <double>     || . . .
+    20   || . . .
+    30
+    40
+    50
+    60
+    70
+    80
+    90
+    100
+    200
+    400
+    800
+    1000
+    2000
+    5000
+    10000
+    100000
 
 
 Files used:
@@ -56,13 +62,10 @@ Files used:
     sort.cpp                (containing the sorting algorithms)
     
     main.cpp                (execution of program)
-    
-    polygonprint.py         (prints the polygon in a graph)
+                            (run 2 set of algorithms and writes the result into desired file)
 
     exe.sh                  (used to compile and run the programs)
 
-
-New Files Added:
 
     localSearch.h
     localSearch.cpp         (implementation for the local Search algorithm)
@@ -71,52 +74,30 @@ New Files Added:
     optimal_convex.cpp      (updated convex hull algorithm for the sub-division)
 
     simulatedAnnealing.h
-    simulatedAnnealing.cpp (implementation for the simulatedAnnealing algorithm)
+    simulatedAnnealing.cpp  (implementation for the simulatedAnnealing algorithm)
     
 
 
 Program Description:
 
-    We implemented the first two algorithms of the second project.
-
-    ~ For the first algorihm:
-        
-        We follow the pseudocode shown to us in the class. From the result polygon of the first two algorithms, 
-            iterate all the edges
-                for every edge find all k-paths
-                    for every k path apply the local step, check if the polygon is simple and if
-                    it is find if the new polygon has better area (min or max area)
-            
-            apply changes
-        repeat until da < threshold
-
-
-    ~ For the second algorithm
-        
-        Local Step Algorithm: 
-            Pick a random vertex k and swap it with the next one.  
-            Check if (k-1, k) edge and (k+1, k+2) edge intersect with each other (creating an X). 
-            If not, then take the (k-1, k, k+1) and (k, k+1, k+2) triangles and 
-            check if a vertex exist inside any of the two triangles we created. 
-            If the above is false calculated the DE and metropolis criterion.
-            If DE < 0 or the metropolis criterion is true, apply the changes
-
-        Global Step Algorithm: 
-            It's the same as local search Algorithm, with L = 1.
-                
-        Subdivisition Algorithm:
-            Sort all the points and divide them into ceil([n-1]/[m-1]) parts. Each part will have a common point.
-            For each sub-polygon created, calculate the polygon using convex hull algorithm and then 
-            improve the area using the global step algorithm. 
-            When all ceil([n-1]/[m-1]) sub-polygons are created merge them together and create the final polygon.
+    Implemented a script to run two algorithm on any given file in a directory. Calculate the ratio between area produced by algorithms and convex hull area. The result is written into the desired output file.
 
 Observations:
 
-    While testing the two algorithms, we came to the conclusion that the first algorithm
-    is much slower than the first one. 
-    Both algorithms improve the final area of the polygon produced by incremental or convex hull algorithms, but the Local Search algorithm although slower it does a much better job finding the best area approximatelly.
+    While implemented the task, we came to the conclusion that the most consistand and fast algorithms to use are incremental-simulated annealing(local step) and convex hull-simulated annealing(global step). The second algorithm is much slower that the first one but produces better area results. Other algorithm compinations were slower or produced poor results (example convex hull-local search)
 
+Code improvements:
+
+    We improved the runtime of our code by:
+        -Cutting unnecessary checks in convex hull algorithm.
+        -Calculate the area of the polygon using triangles instead of using the polygon area
+            function
+        -Avoiding unnecessary checks in Simulated_Annealing(local Step)at the intersect
+            function
+        -Changing the visibility check in simulated_Annealing
+        -Avoiding unnecessary checks in incremental algorithm by changing the visibility
+            check.
     
-Some examples can be found in the testcases/results folders, images of the polygon results can be found in images folder. 
+Some examples can be found in the input folder, and results can be found in results folder. 
     
     

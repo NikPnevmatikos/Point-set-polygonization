@@ -69,9 +69,7 @@ void write_file(string outfile,map<int, vector<double>> result, map<int, vector<
 
     map<int, vector<double>>::iterator it;
     for (it = result.begin(); it != result.end(); ++it) {
-        // cout << '\t' << it->first << '\t' << it->second << '\n';
         MyFile << it->first;
-        cout << to_string(it->first).length() << endl;
         for(int i = 0; i < 8 - to_string(it->first).length(); i++){
             MyFile << " ";
         }

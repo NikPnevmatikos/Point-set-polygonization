@@ -2,6 +2,7 @@
 #include "optimal_convex.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include <chrono>
 
 double fRand(double fMin, double fMax) {        // find random double
     double f = (double)rand() / RAND_MAX;
@@ -48,9 +49,13 @@ bool intersect(Triangle_2 a, vector<Point_2> points) {
 }
 
 
-Polygon_2 simulatedAnnealing(Polygon_2 pol, int L, double convex_area, string minmax, double* resultarea) {
+Polygon_2 simulatedAnnealing(Polygon_2 pol, int L, double convex_area, string minmax, double* resultarea, int cutoff) {
 
-
+    auto start = chrono::high_resolution_clock::now();
+    auto stop = chrono::high_resolution_clock::now();
+    auto duration1 = chrono::duration_cast<chrono::milliseconds>(stop - start);
+    int duration = duration1.count();
+    
     srand (time(NULL));
 
     double area = *resultarea;
@@ -73,7 +78,7 @@ Polygon_2 simulatedAnnealing(Polygon_2 pol, int L, double convex_area, string mi
     double DE = E;
     Polygon_2 max = pol;
 
-    while (T >= 0) {
+    while (T >= 0 && cutoff > duration) {
         Polygon_2 copy = pol;
         int loop = 0;
         bool cannotChange = false;
@@ -166,6 +171,10 @@ Polygon_2 simulatedAnnealing(Polygon_2 pol, int L, double convex_area, string mi
             T = T - 1.0/L;
 
         }
+
+        stop = chrono::high_resolution_clock::now();
+        duration1 = chrono::duration_cast<chrono::milliseconds>(stop - start);
+        duration = duration1.count();
     }
 
     *resultarea = abs(pol.area());
@@ -175,9 +184,14 @@ Polygon_2 simulatedAnnealing(Polygon_2 pol, int L, double convex_area, string mi
 
 
 
-Polygon_2 simulatedAnnealing_global(Polygon_2 pol, int L,double convex_area,string minmax, double* resultarea) {
+Polygon_2 simulatedAnnealing_global(Polygon_2 pol, int L,double convex_area,string minmax, double* resultarea,int cutoff) {
 
     srand(time(NULL));
+
+    auto start = chrono::high_resolution_clock::now();
+    auto stop = chrono::high_resolution_clock::now();
+    auto duration1 = chrono::duration_cast<chrono::milliseconds>(stop - start);
+    int duration = duration1.count();
 
     double area = *resultarea;
     
@@ -195,7 +209,7 @@ Polygon_2 simulatedAnnealing_global(Polygon_2 pol, int L,double convex_area,stri
     }
     double DE = E;
 
-    while (T >= 0) {
+    while (T >= 0 && cutoff > duration) {
 
         Polygon_2 copy = pol;
         int loop = 0;
@@ -263,6 +277,11 @@ Polygon_2 simulatedAnnealing_global(Polygon_2 pol, int L,double convex_area,stri
             E = newE;
             T = T - 1.0/L;
         }
+
+        stop = chrono::high_resolution_clock::now();
+        duration1 = chrono::duration_cast<chrono::milliseconds>(stop - start);
+        duration = duration1.count();
+
     }
 
 

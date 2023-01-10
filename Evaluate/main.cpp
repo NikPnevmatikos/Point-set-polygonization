@@ -60,8 +60,6 @@ int main (int argc, char **argv) {
         if(strcmp(de->d_name, ".") == 0){
             continue;
         }
-        cout << de->d_name << endl;
-    
         Points points;
         
         ifstream file;
@@ -75,29 +73,22 @@ int main (int argc, char **argv) {
         Polygon_2 result;
         double area; 
 
-        cout << "Starting incremental algorithm" <<endl;
+        cout << "\tStarting incremental/local Step algorithm" <<endl;
+        cout << "\t\t-Max area" << endl;
     
         result = incremental(points, "1b", 3, &area);
-        //result = convex_hull(points, edge_selection, &area);
-
-
-        cout << "Starting Local Step algorithm" <<endl;
         
         double initarea = area;
                 
-        //result = localSearch_max(result, threshold, L, &area);
+        int cutoff = points.size() * 500;
+        result = simulatedAnnealing(result, 100, convex_hull_area, "max", &area,cutoff);
 
-        //result = localSearch_min(result, threshold, L, &area);
-
-        result = simulatedAnnealing(result, 100, convex_hull_area, "max", &area);
-
-        //result = simulatedAnnealing_global(result,L,convex_hull_area,maxmin, &area);
-
-        //result = simulatedAnnealing_subdivision(points, L, convex_hull_area,maxmin, &area);
         double max_score = area/convex_hull_area;
         area = 0.0;
+
+        cout << "\t\t-Min area" << endl;
         result = incremental(points, "1b", 2, &area);
-        result = simulatedAnnealing(result, 100, convex_hull_area, "min", &area);
+        result = simulatedAnnealing(result, 100, convex_hull_area, "min", &area, cutoff);
 
         double min_score = area/convex_hull_area;
 
@@ -116,14 +107,18 @@ int main (int argc, char **argv) {
             }
         }
 
-        area = 0.0;
-        result = convex_hull(points, 3, &area);
-        result = simulatedAnnealing_global(result,100,convex_hull_area,"max", &area);
-        max_score = area/convex_hull_area;
+        cout << "\tStarting convex hull/global Step algorithm" <<endl;
+        cout << "\t\t-Max area" << endl;
 
         area = 0.0;
+        result = convex_hull(points, 3, &area);
+        result = simulatedAnnealing_global(result,100,convex_hull_area,"max", &area, cutoff);
+        max_score = area/convex_hull_area;
+
+        cout << "\t\t-Min area" << endl;
+        area = 0.0;
         result = convex_hull(points, 2, &area);
-        result = simulatedAnnealing_global(result,100,convex_hull_area,"min", &area);
+        result = simulatedAnnealing_global(result,100,convex_hull_area,"min", &area, cutoff);
         min_score = area/convex_hull_area;
 
         if (second.find(points.size()) == second.end()){
@@ -141,11 +136,6 @@ int main (int argc, char **argv) {
             }
         }
 
-
-        // auto stop = chrono::high_resolution_clock::now();
-        // auto duration1 = chrono::duration_cast<chrono::milliseconds>(stop - start);
-
-        // int duration = duration1.count();
     
     }
 

@@ -21,9 +21,8 @@ typedef CGAL::Kd_tree<Traits> Kd_Tree;
 typedef CGAL::Fuzzy_iso_box<Traits> Fuzzy_iso_box;
 
 using namespace std;
+ 
 
-//bool is_visible_new(Segment_2, Segment_2, Polygon_2); 
-
-Polygon_2 simulatedAnnealing(Polygon_2, int,double,string, double*);
-Polygon_2 simulatedAnnealing_global(Polygon_2, int,double,string, double*);
+Polygon_2 simulatedAnnealing(Polygon_2, int,double,string, double*,int);
+Polygon_2 simulatedAnnealing_global(Polygon_2, int,double,string, double*, int);
 Polygon_2 simulatedAnnealing_subdivision(vector<Point_2>,int,double,string, double*);
