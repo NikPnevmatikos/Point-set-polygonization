@@ -18,7 +18,10 @@ run:
 
     $./to_polygon –i <point set input file> –ο <output file> polygonInit <incremental or
     convex_hull> -edge_selection <1 or 2 or 3> -initialization <1a
-    or 1b or 2a or 2b | only in incremental>  –algorithm <local_search or simulated_annealing or ant_colony> -L [L parameter according to algorithm] –max [maximal area polygonization] –min [minimal area polygonization] –threshold <double> [in local search] –annealing <"local" or
+    or 1b or 2a or 2b | only in incremental>  –algorithm <local_search or 
+    simulated_annealing or ant_colony> -L [L parameter according to algorithm] 
+    –max [maximal area polygonization] –min [minimal area polygonization]
+     –threshold <double> [in local search] –annealing <"local" or
     "global" or "subdivision" in simulated annealing>
 
 To compile and run the program you can use the exe.sh bash script:
@@ -114,9 +117,12 @@ Observations:
 
     While testing the two algorithms, we came to the conclusion that the first algorithm
     is much slower than the first one. 
-    Both algorithms improve the final area of the polygon produced by incremental or convex hull algorithms, but the Local Search algorithm although slower it does a much better job finding the best area approximatelly.
+    Both algorithms improve the final area of the polygon produced by incremental or convex
+    hull algorithms, but the Local Search algorithm although slower it does a much better
+    job finding the best area approximatelly.
 
     
-Some examples can be found in the testcases/results folders, images of the polygon results can be found in images folder. 
+Some examples can be found in the testcases/results folders, images of the polygon results 
+can be found in images folder. 
     
     

@@ -106,8 +106,9 @@ Observations:
     While testing the two algorithms, we came to the conclusion that the second algorithm
     is much slower than the first one. More specificly, for 600 points the second algorithm 
     runs for about an hour, while the first one for seconds.
-    Both algorithms are greedy, because they don't guarantee that the final area is the maximum
-    possible area or the minimum possible, but they do a pretty good job to find the maximum/minimum area approximately.
+    Both algorithms are greedy, because they don't guarantee that the final area is the
+    maximum possible area or the minimum possible, but they do a pretty good job to find 
+    the maximum/minimum area approximately.
 
 Some examples can be found in the testcases/results folders, images can be found in images folder. 
     
