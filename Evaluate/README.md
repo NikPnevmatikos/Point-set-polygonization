@@ -80,11 +80,18 @@ Files used:
 
 Program Description:
 
-    Implemented a script to run two algorithm on any given file in a directory. Calculate the ratio between area produced by algorithms and convex hull area. The result is written into the desired output file.
+    Implemented a script to run two algorithm on any given file in a directory. Calculate 
+    the ratio between area produced by algorithms and convex hull area. The result is 
+    written into the desired output file.
 
 Observations:
 
-    While implemented the task, we came to the conclusion that the most consistand and fast algorithms to use are incremental-simulated annealing(local step) and convex hull-simulated annealing(global step). The second algorithm is much slower that the first one but produces better area results. Other algorithm compinations were slower or produced poor results (example convex hull-local search)
+    While implemented the task, we came to the conclusion that the most consistand and fast
+    algorithms to use are incremental-simulated annealing(local step) and convex
+    hull-simulated annealing(global step). The second algorithm is much slower that the 
+    first one but produces better area results. Other algorithm compinations were slower or 
+    produced poor results (example convex hull-local search)
+
 
 Code improvements:
 
