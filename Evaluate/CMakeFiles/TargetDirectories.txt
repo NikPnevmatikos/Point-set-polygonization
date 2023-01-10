@@ -1,3 +1,0 @@
-/home/nick/project-emiris/Point-set-polygonization/Evaluate/CMakeFiles/main.dir
-/home/nick/project-emiris/Point-set-polygonization/Evaluate/CMakeFiles/edit_cache.dir
-/home/nick/project-emiris/Point-set-polygonization/Evaluate/CMakeFiles/rebuild_cache.dir
