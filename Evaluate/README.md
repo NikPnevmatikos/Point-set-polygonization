@@ -15,6 +15,7 @@ compile:
     make
 
 run:
+
     $./main -i <point set path> -ο <output file>
 
 To compile and run the program you can use the exe.sh bash script:
