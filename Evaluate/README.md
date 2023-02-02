@@ -24,7 +24,7 @@ To compile and run the program you can use the exe.sh bash script:
     ./exe.sh            (for every other time you want to compile-run)
 
 
-Input file should be in this form:
+Output file should be in this form:
 
          || <Algorithm 1>                                 || <Algorithm 2>           || . . .
     Size || min score | max score | min bound | max bound || <same cols as previously>
