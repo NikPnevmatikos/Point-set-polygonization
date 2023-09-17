@@ -2,10 +2,8 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Name:   Nikolaos Pnevmatikos 
-AM:     1115201900157
 
 Name:   Maria Diamanti
-AM:     1115201900052
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 compile:
