@@ -8,7 +8,11 @@ Given a set of 2D Points, create a simple Polygon with min or max area
  **[Evaluate](./Evaluate):** Implementation of a script that runs two set of algorithms for all files with a set of 2d points in a given directory. Results are written in a new file.    
 
 
-Contributors:/
+Contributors:
+
+ [<a href="https://github.com/NikPnevmatikos/Point-set-polygonization/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=NikPnevmatikos/Point-set-polygonization" />
+</a>]
 
  [<img src="https://github.com/MaryDiam.png" width="60px;"/><br /><sub><a href="https://github.com/MaryDiam">MaryDiam</a></sub>](https://github.com/MaryDiam)
 
