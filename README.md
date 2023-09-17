@@ -9,11 +9,11 @@ Given a set of 2D Points, create a simple Polygon with min or max area
 
 
 Contributors: 
- [<img src="https://github.com/MaryDiam.png" width="60px;"/><br /><sub><ahref="https://github.com/MaryDiam">MaryDiam</a></sub>](https://github.com/MaryDiam)
+ [<img src="https://github.com/MaryDiam.png" width="60px;"/><br /><sub><a href="https://github.com/MaryDiam">MaryDiam</a></sub>](https://github.com/MaryDiam)
 
  Mary Diamandi
 
- [<img src="https://github.com/NikPnevmatikos.png" width="60px;"/><br /><sub><ahref="https://github.com/NikPnevmatikos">NikPnevmatikos</a></sub>](https://github.com/NikPnevmatikos)
+ [<img src="https://github.com/NikPnevmatikos.png" width="60px;"/><br /><sub><a href="https://github.com/NikPnevmatikos">NikPnevmatikos</a></sub>](https://github.com/NikPnevmatikos)
  Nick Pnevmatikos
 
 
